@@ -1,76 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Inquiry Form</title>
-    <style>
-        body{
-            font-family: Arial, sans-serif;
-            max-width: 500px;
-            margin: 50px auto;
-        }
+<form
+  action="https://script.google.com/macros/s/AKfycbyUMiMwiGHhJfaldcdgE_eIz3Gwhku5kg4SX7C_fJ3_yv0QVdS6uK71C3cNSCRSr8Q/exec"
+  method="POST">
 
-        input, textarea{
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            box-sizing: border-box;
-        }
+  Name<input type="text" name="name" required><br>
+  Email id <input type="email" name="email" required><br>
+  Phone Number <input type="text" name="phone"><br>
+  Message<textarea name="message"></textarea><br>
 
-        button{
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            cursor: pointer;
-        }
+  <button type="submit">Send Inquiry</button>
+</form>
 
-        button:hover{
-            background: #0056b3;
-        }
-    </style>
-</head>
-<body>
+<script>
+document.getElementById("contactForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-    <h2>Send Inquiry</h2>
+    const form = this;
 
-    <form id="contactForm">
-        <input type="text" name="name" placeholder="Your Name" required>
-
-        <input type="email" name="email" placeholder="Your Email" required>
-
-        <input type="tel" name="phone" placeholder="Your Phone Number" required>
-
-        <textarea name="message" rows="5" placeholder="Your Message"></textarea>
-
-        <button type="submit">Send Inquiry</button>
-    </form>
-
-    <script>
-       function doGet(e) {
-  return saveData(e);
-}
-
-function doPost(e) {
-  return saveData(e);
-}
-
-function saveData(e) {
-
-  var sheet = SpreadsheetApp
-    .openById("131G2lJ7TRp_GiWqiUgX1Iax_XYFtRXR2fZqxsgH3bdA")
-    .getSheetByName("kamo");
-
-  sheet.appendRow([
-    e.parameter.name || "",
-    e.parameter.email || "",
-    e.parameter.phone || "",
-    e.parameter.message || "",
-    new Date()
-  ]);
-
-  return ContentService.createTextOutput("Success");
-}
-    </script>
-
-</body>
-</html>
+    fetch("https://script.google.com/macros/s/AKfycbyUMiMwiGHhJfaldcdgE_eIz3Gwhku5kg4SX7C_fJ3_yv0QVdS6uK71C3cNSCRSr8Q/exec", {
+        method: "POST",
+        body: new FormData(form),
+        mode: "no-cors"
+    })
+    .then(() => {
+        alert("Inquiry submitted successfully!");
+        form.reset();
+    })
+    .catch(error => {
+        console.error(error);
+        alert("Submission failed");
+    });
+});
+</script>
