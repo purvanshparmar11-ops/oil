@@ -1,48 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Inquiry Form</title>
+    <title>Inquiry Form</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 50px auto;
+        }
+
+        input, textarea{
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+        button{
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+        }
+
+        button:hover{
+            background: #0056b3;
+        }
+    </style>
 </head>
 <body>
 
-<form id="inquiryForm">
-  <input type="text" name="name" placeholder="Name" required><br><br>
+    <h2>Send Inquiry</h2>
 
-  <input type="email" name="email" placeholder="Email" required><br><br>
+    <form id="contactForm">
+        <input type="text" name="name" placeholder="Your Name" required>
 
-  <input type="text" name="phone" placeholder="Phone"><br><br>
+        <input type="email" name="email" placeholder="Your Email" required>
 
-  <textarea name="message" placeholder="Your Inquiry"></textarea><br><br>
+        <input type="tel" name="phone" placeholder="Your Phone Number" required>
 
-  <button type="submit">Submit</button>
-</form>
+        <textarea name="message" rows="5" placeholder="Your Message"></textarea>
 
-<p id="result"></p>
+        <button type="submit">Send Inquiry</button>
+    </form>
 
-<script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxrIDYJl2ZdAG_MuodlHFyZUpGFN-I2y_YNwJ_mWOX0niUoc7rFAeqGiJDr9lZPlr6TUQ/exec";
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", function(e) {
+            e.preventDefault();
 
-document.getElementById("inquiryForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+            const form = this;
+            const formData = new FormData(form);
 
-    const formData = new FormData(this);
-
-    fetch(scriptURL, {
-        method: "POST",
-        body: formData
-    })
-    .then(res => res.text())
-    .then(data => {
-        document.getElementById("result").innerHTML = "Inquiry submitted successfully!";
-        document.getElementById("inquiryForm").reset();
-    })
-    .catch(err => {
-        document.getElementById("result").innerHTML = "Error submitting inquiry.";
-        console.error(err);
-    });
-});
-</script>
+            fetch("https://script.google.com/macros/s/AKfycbxKnt-EnJaAcG_uPUTh4K3io4kAe-AyjSF8xWaeaEgBi6lf4nE6_v3EBGoaPCg_b1gc/exec", {
+                method: "POST",
+                mode: "no-cors",
+                body: formData
+            })
+            .then(() => {
+                alert("Inquiry Sent Successfully! We Will Contact You Soon.");
+                form.reset();
+            })
+            .catch(error => {
+                alert("Error Sending Inquiry");
+                console.error(error);
+            });
+        });
+    </script>
 
 </body>
 </html>
