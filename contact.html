@@ -46,26 +46,30 @@
     </form>
 
     <script>
-        document.getElementById("contactForm").addEventListener("submit", function(e) {
-            e.preventDefault();
+       function doGet(e) {
+  return saveData(e);
+}
 
-            const form = this;
-            const formData = new FormData(form);
+function doPost(e) {
+  return saveData(e);
+}
 
-            fetch("https://script.google.com/macros/s/AKfycbznqz_LxTDF8oQJezYWPtTBugJHEijPu05s0AI-3AGKUB-wdY5OxYDdsxI0gj9s4VvV/exec", {
-                method: "POST",
-                mode: "no-cors",
-                body: formData
-            })
-            .then(() => {
-                alert("Inquiry Sent Successfully! We Will Contact You Soon.");
-                form.reset();
-            })
-            .catch(error => {
-                alert("Error Sending Inquiry");
-                console.error(error);
-            });
-        });
+function saveData(e) {
+
+  var sheet = SpreadsheetApp
+    .openById("131G2lJ7TRp_GiWqiUgX1Iax_XYFtRXR2fZqxsgH3bdA")
+    .getSheetByName("kamo");
+
+  sheet.appendRow([
+    e.parameter.name || "",
+    e.parameter.email || "",
+    e.parameter.phone || "",
+    e.parameter.message || "",
+    new Date()
+  ]);
+
+  return ContentService.createTextOutput("Success");
+}
     </script>
 
 </body>
